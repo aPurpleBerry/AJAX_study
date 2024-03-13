@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button class="reg-btn">注册</button>
+</body>
+<script>
+  /**
+   * 目标：使用XHR进行数据提交-完成注册功能
+   */
+
+  // 点击注册按钮之后触发注册时间
+  document.querySelector('.reg-btn').addEventListener('click',
+  () => {
+    // 假数据
+    const newObj = {
+      username: '11111111',
+      password: '11111111'
+    }
+    
+    // 1. 创建 XMLHttpRequest 对象
+    const xhr = new XMLHttpRequest()
+    // 2. 配置请求方法和请求 url 地址
+    xhr.open('POST', 'http://hmajax.itheima.net/api/register')
+    // 3. 监听 loadend 事件，接收响应结果
+    // loadend ：请求和相应都完成了，就会触发这个回调函数
+    xhr.addEventListener('loadend', () => {
+      console.log(xhr.response);
+    })
+    // 设置请求头 
+    xhr.setRequestHeader('Content-Type','application/json')
+    const usrStr = JSON.stringify(newObj)
+    // 4. 发起请求
+    xhr.send(usrStr)
+  })
+
+</script>
+</html>

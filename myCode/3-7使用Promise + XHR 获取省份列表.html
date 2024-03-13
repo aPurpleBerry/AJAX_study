@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <p class="my-p"></p>
+</body>
+</html>
+
+<script>
+  const p = new Promise((resolve,reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET','http://hmajax.itheima.net/api/province11')
+    xhr.addEventListener('loadend', () => {
+      console.log(xhr);
+      // console.log(xhr.response);
+
+      // 怎么把 XHR 和 Promise 联系起来
+      // 利用响应状态码
+      if(xhr.status >= 200 && xhr.status < 300) {
+        resolve(xhr.response)
+      } else {
+        reject(new Error(xhr.response))
+      }
+    })
+    xhr.send()
+  })
+
+  p.then(result => {
+    console.log(result);
+    const myP = document.querySelector('.my-p')
+    myP.innerHTML = JSON.parse(result).list.join('<br>')
+  }).catch(error => {
+    console.dir(error)
+    const myP = document.querySelector('.my-p')
+    myP.innerHTML = error.message
+  })
+</script>

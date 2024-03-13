@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <p class="myp"></p>
+</body>
+<script>
+  function myAxios(config) { 
+     return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest()
+      if(config.params) {
+        const paramsObj = new URLSearchParams(config.params)
+        const queryString = paramsObj.toString()
+        config.url += `?${queryString}`
+      }
+      xhr.open(config.method || 'GET', config.url)
+      xhr.addEventListener('loadend', ()=>{
+        if(xhr.status >= 200 && xhr.status < 300) {
+          resolve(JSON.parse(xhr.response))
+        } else {
+          reject(new Error(xhr.response))
+        }
+      })
+      // 1 判断有data选项，携带请求体
+      if(config.data) {
+        // 接口文档规定接受的字符是JSON
+        const jsonStr = JSON.stringify(config.data)
+        // 请求头
+        xhr.setRequestHeader('Content-Type','application/json')
+        xhr.send(jsonStr)
+      } else {
+        xhr.send()
+      }
+     })
+  }
+
+  myAxios({
+    url: 'http://hmajax.itheima.net/api/register',
+    method: 'POST',
+    data: {
+      username: 'itheima999',
+      password: '666666'
+    }
+  }).then(result => {
+    console.log(result);
+    // myp.innerHTML = result.list.join('<br>')
+  }).catch(error => {
+    console.dir(error);
+  })
+</script>
+</html>
